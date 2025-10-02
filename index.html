@@ -1,673 +1,698 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Car Debt Tracker</title>
     <style>
-        :root {
-            --primary: #8e44ad;
-            --primary-dark: #732d91;
-            --secondary: #27ae60;
-            --secondary-dark: #219653;
-            --danger: #e74c3c;
-            --danger-dark: #c0392b;
-            --warning: #f39c12;
-            --dark: #2c3e50;
-            --light: #ecf0f1;
-            --gray: #95a5a6;
-            --success-bg: #d5f4e6;
-            --success-text: #155724;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      :root {
+        --primary: #2563eb; /* Bright Blue 600 */
+        --primary-dark: #1e40af; /* Blue 800 */
+        --secondary: #16a34a; /* Green 600 */
+        --secondary-dark: #166534; /* Green 800 */
+        --danger: #dc2626; /* Red 600 */
+        --danger-dark: #991b1b; /* Red 800 */
+        --warning: #f59e0b; /* Amber 500 */
+        --dark: #111827; /* Neutral Dark */
+        --light: #f9fafb; /* Off White */
+        --gray: #6b7280; /* Neutral Gray */
+        --success-bg: #ecfdf5; /* Green 50 */
+        --success-text: #065f46; /* Green 800 */
+      }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+      body {
+        background: linear-gradient(135deg, #e0f2fe 0%, #f0fdfa 100%);
+        color: var(--dark);
+        line-height: 1.6;
+        min-height: 100vh;
+      }
 
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: var(--dark);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+      header {
+        background: rgba(255, 255, 255, 0.95);
+        color: var(--dark);
+        padding: 25px 20px;
+        text-align: center;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 25px;
+        backdrop-filter: blur(10px);
+      }
 
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            color: var(--dark);
-            padding: 25px 20px;
-            text-align: center;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 25px;
-            backdrop-filter: blur(10px);
-        }
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 5px;
+        color: var(--primary-dark);
+      }
 
+      .subtitle {
+        font-size: 1rem;
+        opacity: 0.8;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .card-title {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        color: var(--dark);
+        border-bottom: 1px solid var(--light);
+        padding-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .card-title i {
+        color: var(--primary);
+      }
+
+      .debt-display {
+        text-align: center;
+        padding: 25px 15px;
+      }
+
+      .debt-amount {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--dark);
+        margin: 15px 0;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .paid-amount {
+        color: var(--secondary);
+        font-size: 1.2rem;
+        margin-top: 10px;
+        font-weight: 600;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid var(--gray);
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s;
+      }
+
+      input:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.2);
+      }
+
+      .btn {
+        display: inline-block;
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s;
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      .btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-success {
+        background: var(--secondary);
+      }
+
+      .btn-success:hover {
+        background: var(--secondary-dark);
+      }
+
+      .btn-danger {
+        background: var(--danger);
+      }
+
+      .btn-danger:hover {
+        background: var(--danger-dark);
+      }
+
+      .btn-warning {
+        background: var(--warning);
+      }
+
+      .transaction-list {
+        list-style: none;
+      }
+
+      .transaction-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid var(--light);
+        transition: all 0.3s;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      .transaction-item:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .transaction-details {
+        flex: 1;
+      }
+
+      .transaction-amount {
+        font-weight: bold;
+        color: var(--secondary);
+        margin-right: 15px;
+        font-size: 1.1rem;
+      }
+
+      .transaction-date {
+        color: var(--gray);
+        font-size: 0.9rem;
+      }
+
+      .transaction-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .action-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.1rem;
+        padding: 8px;
+        border-radius: 6px;
+        transition: all 0.3s;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .edit-btn {
+        color: var(--primary);
+        background: rgba(142, 68, 173, 0.1);
+      }
+
+      .edit-btn:hover {
+        background: var(--primary);
+        color: white;
+      }
+
+      .delete-btn {
+        color: var(--danger);
+        background: rgba(231, 76, 60, 0.1);
+      }
+
+      .delete-btn:hover {
+        background: var(--danger);
+        color: white;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 30px 20px;
+        color: var(--gray);
+      }
+
+      .empty-state p {
+        margin-bottom: 15px;
+      }
+
+      footer {
+        text-align: center;
+        padding: 20px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+        margin-top: 30px;
+      }
+
+      /* Notification Styles */
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        transform: translateX(150%);
+        transition: transform 0.3s ease;
+        max-width: 300px;
+      }
+
+      .notification.show {
+        transform: translateX(0);
+      }
+
+      .notification.success {
+        background: var(--secondary);
+      }
+
+      .notification.error {
+        background: var(--danger);
+      }
+
+      .notification.info {
+        background: var(--primary);
+      }
+
+      /* Edit Modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+      }
+
+      .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transform: translateY(-20px);
+        transition: transform 0.3s;
+      }
+
+      .modal-overlay.active .modal {
+        transform: translateY(0);
+      }
+
+      .modal-title {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        color: var(--dark);
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .modal-actions .btn {
+        flex: 1;
+        margin: 0;
+      }
+
+      @media (min-width: 768px) {
         h1 {
-            font-size: 1.8rem;
-            margin-bottom: 5px;
-            color: var(--primary-dark);
-        }
-
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.8;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .card-title {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            color: var(--dark);
-            border-bottom: 1px solid var(--light);
-            padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-title i {
-            color: var(--primary);
-        }
-
-        .debt-display {
-            text-align: center;
-            padding: 25px 15px;
+          font-size: 2.2rem;
         }
 
         .debt-amount {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--dark);
-            margin: 15px 0;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .paid-amount {
-            color: var(--secondary);
-            font-size: 1.2rem;
-            margin-top: 10px;
-            font-weight: 600;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--gray);
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        input:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.2);
+          font-size: 3rem;
         }
 
         .btn {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            width: 100%;
-            margin-top: 10px;
+          width: auto;
         }
 
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        .form-row {
+          display: flex;
+          gap: 15px;
         }
 
-        .btn-success {
-            background: var(--secondary);
+        .form-group {
+          flex: 1;
         }
-
-        .btn-success:hover {
-            background: var(--secondary-dark);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-        }
-
-        .btn-danger:hover {
-            background: var(--danger-dark);
-        }
-
-        .btn-warning {
-            background: var(--warning);
-        }
-
-        .transaction-list {
-            list-style: none;
-        }
-
-        .transaction-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid var(--light);
-            transition: all 0.3s;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            background: rgba(255, 255, 255, 0.7);
-        }
-
-        .transaction-item:hover {
-            background: rgba(255, 255, 255, 0.9);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .transaction-details {
-            flex: 1;
-        }
-
-        .transaction-amount {
-            font-weight: bold;
-            color: var(--secondary);
-            margin-right: 15px;
-            font-size: 1.1rem;
-        }
-
-        .transaction-date {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-
-        .transaction-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .action-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
-            padding: 8px;
-            border-radius: 6px;
-            transition: all 0.3s;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .edit-btn {
-            color: var(--primary);
-            background: rgba(142, 68, 173, 0.1);
-        }
-
-        .edit-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .delete-btn {
-            color: var(--danger);
-            background: rgba(231, 76, 60, 0.1);
-        }
-
-        .delete-btn:hover {
-            background: var(--danger);
-            color: white;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 30px 20px;
-            color: var(--gray);
-        }
-
-        .empty-state p {
-            margin-bottom: 15px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-            margin-top: 30px;
-        }
-
-        /* Notification Styles */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
-            transform: translateX(150%);
-            transition: transform 0.3s ease;
-            max-width: 300px;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.success {
-            background: var(--secondary);
-        }
-
-        .notification.error {
-            background: var(--danger);
-        }
-
-        .notification.info {
-            background: var(--primary);
-        }
-
-        /* Edit Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transform: translateY(-20px);
-            transition: transform 0.3s;
-        }
-
-        .modal-overlay.active .modal {
-            transform: translateY(0);
-        }
-
-        .modal-title {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            color: var(--dark);
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .modal-actions .btn {
-            flex: 1;
-            margin: 0;
-        }
-
-        @media (min-width: 768px) {
-            h1 {
-                font-size: 2.2rem;
-            }
-
-            .debt-amount {
-                font-size: 3rem;
-            }
-
-            .btn {
-                width: auto;
-            }
-
-            .form-row {
-                display: flex;
-                gap: 15px;
-            }
-
-            .form-group {
-                flex: 1;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <div class="container">
-            <h1>Car Debt Tracker</h1>
-            <p class="subtitle">Track and manage your car loan payments</p>
-        </div>
+      <div class="container">
+        <h1>Car Debt Tracker</h1>
+        <p class="subtitle">Track and manage your car loan payments</p>
+      </div>
     </header>
 
     <div class="container">
-        <!-- Current Debt Section -->
-        <section class="card debt-display">
-            <h2 class="card-title">Current Debt</h2>
-            <div class="debt-amount">KSh 37,500</div>
-            <p class="paid-amount">Total Paid: KSh 0</p>
-        </section>
+      <!-- Current Debt Section -->
+      <section class="card debt-display">
+        <h2 class="card-title">Current Debt</h2>
+        <div class="debt-amount">KSh 37,500</div>
+        <p class="paid-amount">Total Paid: KSh 0</p>
+      </section>
 
-        <!-- Payment Form Section -->
-        <section class="card">
-            <h2 class="card-title">Make a Payment</h2>
-            <form id="payment-form">
-                <div class="form-group">
-                    <label for="payment-amount">Payment Amount (KSh)</label>
-                    <input type="number" id="payment-amount" placeholder="Enter amount" min="1" required>
-                </div>
-                <button type="submit" class="btn btn-success">Record Payment</button>
-            </form>
-        </section>
+      <!-- Payment Form Section -->
+      <section class="card">
+        <h2 class="card-title">Make a Payment</h2>
+        <form id="payment-form">
+          <div class="form-group">
+            <label for="payment-amount">Payment Amount (KSh)</label>
+            <input
+              type="number"
+              id="payment-amount"
+              placeholder="Enter amount"
+              min="1"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-success">Record Payment</button>
+        </form>
+      </section>
 
-        <!-- Transaction History Section -->
-        <section class="card">
-            <h2 class="card-title">Payment History</h2>
-            <div id="transactions-container">
-                <div class="empty-state">
-                    <p>No payments recorded yet</p>
-                    <p>Start by making your first payment above</p>
-                </div>
-            </div>
-        </section>
+      <!-- Transaction History Section -->
+      <section class="card">
+        <h2 class="card-title">Payment History</h2>
+        <div id="transactions-container">
+          <div class="empty-state">
+            <p>No payments recorded yet</p>
+            <p>Start by making your first payment above</p>
+          </div>
+        </div>
+      </section>
     </div>
 
     <!-- Edit Modal -->
     <div class="modal-overlay" id="edit-modal">
-        <div class="modal">
-            <h3 class="modal-title">Edit Payment</h3>
-            <div class="form-group">
-                <label for="edit-amount">Payment Amount (KSh)</label>
-                <input type="number" id="edit-amount" min="1" required>
-            </div>
-            <div class="modal-actions">
-                <button class="btn btn-warning" id="cancel-edit">Cancel</button>
-                <button class="btn btn-success" id="save-edit">Save Changes</button>
-            </div>
+      <div class="modal">
+        <h3 class="modal-title">Edit Payment</h3>
+        <div class="form-group">
+          <label for="edit-amount">Payment Amount (KSh)</label>
+          <input type="number" id="edit-amount" min="1" required />
         </div>
+        <div class="modal-actions">
+          <button class="btn btn-warning" id="cancel-edit">Cancel</button>
+          <button class="btn btn-success" id="save-edit">Save Changes</button>
+        </div>
+      </div>
     </div>
 
     <!-- Notification -->
     <div class="notification" id="notification"></div>
 
     <footer>
-        <div class="container">
-            <p>Car Debt Tracker &copy; 2023</p>
-        </div>
+      <div class="container">
+        <p>Car Debt Tracker &copy; 2023</p>
+      </div>
     </footer>
 
     <script>
-        // Initialize variables
-        let currentDebt = 37500;
-        let totalPaid = 0;
-        let transactions = [];
-        let editingIndex = -1;
+      // Initialize variables
+      let currentDebt = 37500;
+      let totalPaid = 0;
+      let transactions = [];
+      let editingIndex = -1;
 
-        // DOM Elements
-        const debtAmountElement = document.querySelector('.debt-amount');
-        const paidAmountElement = document.querySelector('.paid-amount');
-        const paymentForm = document.getElementById('payment-form');
-        const paymentAmountInput = document.getElementById('payment-amount');
-        const transactionsContainer = document.getElementById('transactions-container');
-        const editModal = document.getElementById('edit-modal');
-        const editAmountInput = document.getElementById('edit-amount');
-        const cancelEditBtn = document.getElementById('cancel-edit');
-        const saveEditBtn = document.getElementById('save-edit');
-        const notification = document.getElementById('notification');
+      // DOM Elements
+      const debtAmountElement = document.querySelector('.debt-amount');
+      const paidAmountElement = document.querySelector('.paid-amount');
+      const paymentForm = document.getElementById('payment-form');
+      const paymentAmountInput = document.getElementById('payment-amount');
+      const transactionsContainer = document.getElementById(
+        'transactions-container'
+      );
+      const editModal = document.getElementById('edit-modal');
+      const editAmountInput = document.getElementById('edit-amount');
+      const cancelEditBtn = document.getElementById('cancel-edit');
+      const saveEditBtn = document.getElementById('save-edit');
+      const notification = document.getElementById('notification');
 
-        // Load data from localStorage
-        function loadData() {
-            const savedData = localStorage.getItem('carDebtData');
-            if (savedData) {
-                const data = JSON.parse(savedData);
-                currentDebt = data.currentDebt;
-                totalPaid = data.totalPaid;
-                transactions = data.transactions;
-            }
+      // Load data from localStorage
+      function loadData() {
+        const savedData = localStorage.getItem('carDebtData');
+        if (savedData) {
+          const data = JSON.parse(savedData);
+          currentDebt = data.currentDebt;
+          totalPaid = data.totalPaid;
+          transactions = data.transactions;
         }
+      }
 
-        // Save data to localStorage
-        function saveData() {
-            const data = {
-                currentDebt,
-                totalPaid,
-                transactions
-            };
-            localStorage.setItem('carDebtData', JSON.stringify(data));
-        }
+      // Save data to localStorage
+      function saveData() {
+        const data = {
+          currentDebt,
+          totalPaid,
+          transactions,
+        };
+        localStorage.setItem('carDebtData', JSON.stringify(data));
+      }
 
-        // Show notification
-        function showNotification(message, type = 'success') {
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.classList.add('show');
+      // Show notification
+      function showNotification(message, type = 'success') {
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.classList.add('show');
 
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
+        setTimeout(() => {
+          notification.classList.remove('show');
+        }, 3000);
+      }
 
-        // Format currency for display
-        function formatCurrency(amount) {
-            return 'KSh ' + amount.toLocaleString('en-KE');
-        }
+      // Format currency for display
+      function formatCurrency(amount) {
+        return 'KSh ' + amount.toLocaleString('en-KE');
+      }
 
-        // Update the debt display
-        function updateDebtDisplay() {
-            debtAmountElement.textContent = formatCurrency(currentDebt);
-            paidAmountElement.textContent = `Total Paid: ${formatCurrency(totalPaid)}`;
-        }
+      // Update the debt display
+      function updateDebtDisplay() {
+        debtAmountElement.textContent = formatCurrency(currentDebt);
+        paidAmountElement.textContent = `Total Paid: ${formatCurrency(
+          totalPaid
+        )}`;
+      }
 
-        // Format date for display
-        function formatDate(date) {
-            const options = { year: 'numeric', month: 'short', day: 'numeric' };
-            return date.toLocaleDateString('en-KE', options);
-        }
+      // Format date for display
+      function formatDate(date) {
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        return date.toLocaleDateString('en-KE', options);
+      }
 
-        // Render transactions list
-        function renderTransactions() {
-            if (transactions.length === 0) {
-                transactionsContainer.innerHTML = `
+      // Render transactions list
+      function renderTransactions() {
+        if (transactions.length === 0) {
+          transactionsContainer.innerHTML = `
                     <div class="empty-state">
                         <p>No payments recorded yet</p>
                         <p>Start by making your first payment above</p>
                     </div>
                 `;
-                return;
-            }
+          return;
+        }
 
-            transactionsContainer.innerHTML = `
+        transactionsContainer.innerHTML = `
                 <ul class="transaction-list">
-                    ${transactions.map((transaction, index) => `
+                    ${transactions
+                      .map(
+                        (transaction, index) => `
                         <li class="transaction-item">
                             <div class="transaction-details">
-                                <div class="transaction-amount">${formatCurrency(transaction.amount)}</div>
-                                <div class="transaction-date">${transaction.date}</div>
+                                <div class="transaction-amount">${formatCurrency(
+                                  transaction.amount
+                                )}</div>
+                                <div class="transaction-date">${
+                                  transaction.date
+                                }</div>
                             </div>
                             <div class="transaction-actions">
                                 <button class="action-btn edit-btn" data-index="${index}">✏️</button>
                                 <button class="action-btn delete-btn" data-index="${index}">🗑️</button>
                             </div>
                         </li>
-                    `).join('')}
+                    `
+                      )
+                      .join('')}
                 </ul>
             `;
 
-            // Add event listeners for edit and delete buttons
-            document.querySelectorAll('.edit-btn').forEach(button => {
-                button.addEventListener('click', handleEditTransaction);
-            });
-
-            document.querySelectorAll('.delete-btn').forEach(button => {
-                button.addEventListener('click', handleDeleteTransaction);
-            });
-        }
-
-        // Handle payment form submission
-        paymentForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const paymentAmount = parseInt(paymentAmountInput.value);
-
-            if (paymentAmount <= 0) {
-                showNotification('Please enter a valid payment amount', 'error');
-                return;
-            }
-
-            if (paymentAmount > currentDebt) {
-                showNotification('Payment amount cannot exceed current debt', 'error');
-                return;
-            }
-
-            // Create transaction
-            const transaction = {
-                amount: paymentAmount,
-                date: formatDate(new Date()),
-                originalAmount: paymentAmount
-            };
-
-            // Update values
-            currentDebt -= paymentAmount;
-            totalPaid += paymentAmount;
-            transactions.unshift(transaction); // Add to beginning of array
-
-            // Update UI
-            updateDebtDisplay();
-            renderTransactions();
-            saveData();
-
-            // Reset form
-            paymentForm.reset();
-
-            // Show success message
-            showNotification(`Payment of ${formatCurrency(paymentAmount)} recorded successfully!`);
+        // Add event listeners for edit and delete buttons
+        document.querySelectorAll('.edit-btn').forEach((button) => {
+          button.addEventListener('click', handleEditTransaction);
         });
 
-        // Handle edit transaction
-        function handleEditTransaction(e) {
-            editingIndex = e.target.getAttribute('data-index');
-            const transaction = transactions[editingIndex];
+        document.querySelectorAll('.delete-btn').forEach((button) => {
+          button.addEventListener('click', handleDeleteTransaction);
+        });
+      }
 
-            editAmountInput.value = transaction.amount;
-            editModal.classList.add('active');
+      // Handle payment form submission
+      paymentForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const paymentAmount = parseInt(paymentAmountInput.value);
+
+        if (paymentAmount <= 0) {
+          showNotification('Please enter a valid payment amount', 'error');
+          return;
         }
 
-        // Handle save edit
-        saveEditBtn.addEventListener('click', function() {
-            const newAmount = parseInt(editAmountInput.value);
-
-            if (isNaN(newAmount) || newAmount <= 0) {
-                showNotification('Please enter a valid amount', 'error');
-                return;
-            }
-
-            const transaction = transactions[editingIndex];
-            const difference = newAmount - transaction.amount;
-
-            // Check if the new amount would make debt negative
-            if (currentDebt - difference < 0) {
-                showNotification('This adjustment would make the debt negative. Please enter a smaller amount.', 'error');
-                return;
-            }
-
-            // Update transaction
-            transaction.amount = newAmount;
-
-            // Update debt and total paid
-            currentDebt -= difference;
-            totalPaid += difference;
-
-            // Update UI
-            updateDebtDisplay();
-            renderTransactions();
-            saveData();
-
-            // Close modal
-            editModal.classList.remove('active');
-
-            showNotification('Payment updated successfully!');
-        });
-
-        // Handle cancel edit
-        cancelEditBtn.addEventListener('click', function() {
-            editModal.classList.remove('active');
-        });
-
-        // Handle delete transaction
-        function handleDeleteTransaction(e) {
-            const index = e.target.getAttribute('data-index');
-            const transaction = transactions[index];
-
-            // Create a custom confirmation
-            if (confirm('Are you sure you want to delete this payment?')) {
-                // Restore the amount to debt
-                currentDebt += transaction.amount;
-                totalPaid -= transaction.amount;
-
-                // Remove transaction
-                transactions.splice(index, 1);
-
-                // Update UI
-                updateDebtDisplay();
-                renderTransactions();
-                saveData();
-
-                showNotification('Payment deleted successfully!');
-            }
+        if (paymentAmount > currentDebt) {
+          showNotification(
+            'Payment amount cannot exceed current debt',
+            'error'
+          );
+          return;
         }
 
-        // Initialize the app
-        loadData();
+        // Create transaction
+        const transaction = {
+          amount: paymentAmount,
+          date: formatDate(new Date()),
+          originalAmount: paymentAmount,
+        };
+
+        // Update values
+        currentDebt -= paymentAmount;
+        totalPaid += paymentAmount;
+        transactions.unshift(transaction); // Add to beginning of array
+
+        // Update UI
         updateDebtDisplay();
         renderTransactions();
+        saveData();
+
+        // Reset form
+        paymentForm.reset();
+
+        // Show success message
+        showNotification(
+          `Payment of ${formatCurrency(paymentAmount)} recorded successfully!`
+        );
+      });
+
+      // Handle edit transaction
+      function handleEditTransaction(e) {
+        editingIndex = e.target.getAttribute('data-index');
+        const transaction = transactions[editingIndex];
+
+        editAmountInput.value = transaction.amount;
+        editModal.classList.add('active');
+      }
+
+      // Handle save edit
+      saveEditBtn.addEventListener('click', function () {
+        const newAmount = parseInt(editAmountInput.value);
+
+        if (isNaN(newAmount) || newAmount <= 0) {
+          showNotification('Please enter a valid amount', 'error');
+          return;
+        }
+
+        const transaction = transactions[editingIndex];
+        const difference = newAmount - transaction.amount;
+
+        // Check if the new amount would make debt negative
+        if (currentDebt - difference < 0) {
+          showNotification(
+            'This adjustment would make the debt negative. Please enter a smaller amount.',
+            'error'
+          );
+          return;
+        }
+
+        // Update transaction
+        transaction.amount = newAmount;
+
+        // Update debt and total paid
+        currentDebt -= difference;
+        totalPaid += difference;
+
+        // Update UI
+        updateDebtDisplay();
+        renderTransactions();
+        saveData();
+
+        // Close modal
+        editModal.classList.remove('active');
+
+        showNotification('Payment updated successfully!');
+      });
+
+      // Handle cancel edit
+      cancelEditBtn.addEventListener('click', function () {
+        editModal.classList.remove('active');
+      });
+
+      // Handle delete transaction
+      function handleDeleteTransaction(e) {
+        const index = e.target.getAttribute('data-index');
+        const transaction = transactions[index];
+
+        // Create a custom confirmation
+        if (confirm('Are you sure you want to delete this payment?')) {
+          // Restore the amount to debt
+          currentDebt += transaction.amount;
+          totalPaid -= transaction.amount;
+
+          // Remove transaction
+          transactions.splice(index, 1);
+
+          // Update UI
+          updateDebtDisplay();
+          renderTransactions();
+          saveData();
+
+          showNotification('Payment deleted successfully!');
+        }
+      }
+
+      // Initialize the app
+      loadData();
+      updateDebtDisplay();
+      renderTransactions();
     </script>
-</body>
+  </body>
 </html>
